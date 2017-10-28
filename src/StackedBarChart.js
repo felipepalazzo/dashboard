@@ -42,7 +42,9 @@ class StackedBarChat extends Component {
     return (
       <div>
         <svg width={width} height={height} id={chartId}>
-          <Slices range={range} margin={this.state.margin}/>
+          <g transform={`translate(${this.state.margin.left}, ${this.state.margin.top})`}>
+            <Slices range={range} data={data} />
+          </g>
         </svg>
       </div>
     )

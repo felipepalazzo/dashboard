@@ -2,18 +2,17 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 class Slices extends Component {
+  renderRanges(value, i) {
+    return(<g key={i} fill={value}></g>)
+  }
   render(){
-    const { range, margin } = this.props
-    return (
-      <g transform={`translate(${margin.left}, ${margin.top})`}>
-        {range.map((r, i) => (<g key={i} fill={r}></g>))}
-      </g>
-    )
+    const { range } = this.props
+    const items = range.map(this.renderRanges)
+    return (items)
   }
 }
 
 Slices.propTypes = {
-  margin: PropTypes.object.isRequired,
   range: PropTypes.array.isRequired,
 }
 
