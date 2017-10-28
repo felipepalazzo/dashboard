@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { stack } from 'd3-shape'
-import { scaleBand, scaleLinear, scaleOrdinal } from 'd3-scale'
+import { max } from 'd3-array'
+import {
+  scaleBand,
+  scaleLinear,
+  scaleOrdinal,
+} from 'd3-scale'
 import Slices from './Slices'
 
 class StackedBarChat extends Component {
@@ -20,7 +25,8 @@ class StackedBarChat extends Component {
     }
   }
   render() {
-    const { width, height, chartId, range } = this.props
+    const { width, height, chartId, range, data } = this.props
+
     const x = scaleBand()
       .rangeRound([0, width])
       .padding(.1)
@@ -28,6 +34,11 @@ class StackedBarChat extends Component {
     const y = scaleLinear().rangeRound([height, 0])
     const z = scaleOrdinal().range(range)
     const stacked = stack()
+
+    x.domain(data.map(d => d.country))
+    y.domain([0, max(data, d => d.total)]).nice()
+    z.domain(range)
+
     return (
       <div>
         <svg width={width} height={height} id={chartId}>
@@ -42,6 +53,8 @@ StackedBarChat.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   chartId: PropTypes.string.isRequired,
+  range: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
 }
 
 export default StackedBarChat
