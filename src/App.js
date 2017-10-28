@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
+import StackedBarChat from './StackedBarChart'
 
-class App extends Component {
-  render() {
-    return <h1>Dashboard</h1>
-  }
-}
+const App = () =>
+  <section>
+    <h1>Dashboard</h1>
+    <StackedBarChat width={960} height={500} chartId={'country'} />
+  </section>
 
 export default App
