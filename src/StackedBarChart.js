@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { stack } from 'd3-shape'
+import { scaleBand, scaleLinear, scaleOrdinal } from 'd3-scale'
 
 class StackedBarChat extends Component {
   constructor(props) {
@@ -13,6 +15,13 @@ class StackedBarChat extends Component {
   }
   render() {
     const { width, height, chartId } = this.props
+    const x = scaleBand()
+      .rangeRound([0, width])
+      .padding(.1)
+      .align(.1)
+    const y = scaleLinear().rangeRound([height, 0])
+    const z = scaleOrdinal().range(['#8da0cb', '#fc8d62'])
+    const stacked = stack()
     return (
       <div>
         <svg width={width} height={height} id={chartId}>
