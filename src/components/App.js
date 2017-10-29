@@ -1,6 +1,6 @@
 import React from 'react'
 import StackedBarChat from './StackedBarChart'
-import countries from './country.json'
+import countries from '../data/country.json'
 
 const App = () =>
   <section>
