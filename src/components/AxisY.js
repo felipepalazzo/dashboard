@@ -5,8 +5,8 @@ import { select } from 'd3-selection'
 
 class AxisY extends Component {
   componentDidMount() {
-    const { yScale } = this.props
-    select(this.node).call(axisLeft(yScale).ticks(10, 's'))
+    const { yScale, ticks } = this.props
+    select(this.node).call(axisLeft(yScale).ticks(ticks, 's'))
   }
   render(){
     return(
@@ -20,6 +20,7 @@ class AxisY extends Component {
 
 AxisY.propTypes = {
   yScale: PropTypes.func.isRequired,
+  ticks: PropTypes.number.isRequired,
 }
 
 export default AxisY

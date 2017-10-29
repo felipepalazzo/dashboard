@@ -18,6 +18,7 @@ class Charts extends Component {
       width: 960,
       height: 500,
       numOfCharts: 6,
+      ticks: 10,
       keys: ['p2p', 'cdn'],
     }
   }
@@ -33,6 +34,7 @@ class Charts extends Component {
             key={i}
             data={data}
             keys={this.state.keys}
+            ticks={this.state.ticks}
             width={this.state.width}
             height={this.state.height}
             margin={this.state.margin}

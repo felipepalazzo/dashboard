@@ -11,6 +11,7 @@ import {
 
 import AxisX from './AxisX'
 import AxisY from './AxisY'
+import Grid from './Grid'
 
 class StackedBarChat extends Component {
   constructor(props) {
@@ -73,7 +74,7 @@ class StackedBarChat extends Component {
       .attr('width', x.bandwidth())
   }
   render() {
-    const { width, height, margin } = this.props
+    const { width, height, margin, ticks } = this.props
     return (
       <svg width={width} height={height}>
         <g
@@ -82,7 +83,11 @@ class StackedBarChat extends Component {
           }
           ref={node => this.node = node}>
           <AxisX height={this.state.height} xScale={this.xScale()} />
-          <AxisY yScale={this.yScale()} />
+          <AxisY yScale={this.yScale()} ticks={ticks} />
+          <Grid
+            width={this.state.width}
+            yScale={this.yScale()}
+            ticks={ticks} />
         </g>
       </svg>
     )
@@ -92,6 +97,7 @@ class StackedBarChat extends Component {
 StackedBarChat.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
+  ticks: PropTypes.number.isRequired,
   range: PropTypes.arrayOf(PropTypes.string).isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   keys: PropTypes.arrayOf(PropTypes.string).isRequired,
