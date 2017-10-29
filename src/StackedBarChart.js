@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { stack } from 'd3-shape'
 import { max } from 'd3-array'
+import { select } from 'd3-selection'
 import {
   scaleBand,
   scaleLinear,
   scaleOrdinal,
 } from 'd3-scale'
-import Slices from './Slices'
 
 class StackedBarChat extends Component {
   constructor(props) {
@@ -23,9 +23,16 @@ class StackedBarChat extends Component {
       width: props.width - margin.left - margin.right,
       height: props.height - margin.top - margin.bottom,
     }
+    this.createPieces = this.createPieces.bind(this)
   }
-  render() {
-    const { width, height, chartId, range, data } = this.props
+  componentDidMount() {
+    this.createPieces()
+  }
+  componentDidUpdate() {
+    this.createPieces()
+  }
+  createPieces() {
+    const { width, height, range, data } = this.props
 
     const x = scaleBand()
       .rangeRound([0, width])
@@ -33,20 +40,28 @@ class StackedBarChat extends Component {
       .align(.1)
     const y = scaleLinear().rangeRound([height, 0])
     const z = scaleOrdinal().range(range)
-    const stacked = stack()
 
     x.domain(data.map(d => d.country))
     y.domain([0, max(data, d => d.total)]).nice()
     z.domain(range)
 
+    const node = this.node
+    const stacked = stack()
+    const series = stacked.keys(['p2p', 'cdn'])(data)
+
+    select(node)
+      .selectAll('.serie')
+      .data(series)
+      .enter().append('g')
+      .attr('class', 'serie')
+      .attr('fill', d => z(d.key))
+  }
+  render() {
+    const { width, height, chartId } = this.props
     return (
-      <div>
-        <svg width={width} height={height} id={chartId}>
-          <g transform={`translate(${this.state.margin.left}, ${this.state.margin.top})`}>
-            <Slices range={range} data={data} />
-          </g>
-        </svg>
-      </div>
+      <svg width={width} height={height} id={chartId}>
+        <g transform={`translate(${this.state.margin.left}, ${this.state.margin.top})`} ref={node => this.node = node}></g>
+      </svg>
     )
   }
 }
