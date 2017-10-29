@@ -4,9 +4,6 @@ import { axisBottom } from 'd3-axis'
 import { select } from 'd3-selection'
 
 class AxisX extends Component {
-  constructor(props) {
-    super(props)
-  }
   componentDidMount() {
     const { xScale } = this.props
     select(this.node).call(axisBottom(xScale))
