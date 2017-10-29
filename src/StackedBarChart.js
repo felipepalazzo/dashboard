@@ -23,16 +23,18 @@ class StackedBarChat extends Component {
       width: props.width - margin.left - margin.right,
       height: props.height - margin.top - margin.bottom,
     }
-    this.createPieces = this.createPieces.bind(this)
+    this.createChart = this.createChart.bind(this)
   }
   componentDidMount() {
-    this.createPieces()
+    this.createChart()
   }
   componentDidUpdate() {
-    this.createPieces()
+    this.createChart()
   }
-  createPieces() {
-    const { width, height, range, data } = this.props
+  createChart() {
+    const { range, data } = this.props
+    const { width, height } = this.state
+    data.sort((a, b) => b.total - a.total)
 
     const x = scaleBand()
       .rangeRound([0, width])
@@ -43,7 +45,7 @@ class StackedBarChat extends Component {
 
     x.domain(data.map(d => d.country))
     y.domain([0, max(data, d => d.total)]).nice()
-    z.domain(range)
+    z.domain(['p2p', 'cdn'])
 
     const node = this.node
     const stacked = stack()
@@ -55,12 +57,24 @@ class StackedBarChat extends Component {
       .enter().append('g')
       .attr('class', 'serie')
       .attr('fill', d => z(d.key))
+      .selectAll('rect')
+      .data((d) => d)
+      .enter().append('rect')
+      .attr('x', d => x(d.data.country))
+      .attr('y', (d) => y(d[1]))
+      .attr('height', d => y(d[0]) - y(d[1]))
+      .attr('width', x.bandwidth())
   }
   render() {
     const { width, height, chartId } = this.props
+    const { margin } = this.state
     return (
       <svg width={width} height={height} id={chartId}>
-        <g transform={`translate(${this.state.margin.left}, ${this.state.margin.top})`} ref={node => this.node = node}></g>
+        <g
+          transform={
+            `translate(${margin.left},${margin.top})`
+          }
+          ref={node => this.node = node}></g>
       </svg>
     )
   }

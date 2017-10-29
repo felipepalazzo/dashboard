@@ -4,7 +4,6 @@ import countries from './country.json'
 
 const App = () =>
   <section>
-    <h1>Dashboard</h1>
     <StackedBarChat
       data={countries}
       width={960}
