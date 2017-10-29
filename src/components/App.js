@@ -1,15 +1,9 @@
 import React from 'react'
-import StackedBarChat from './StackedBarChart'
-import countries from '../data/country.json'
+import Charts from './Charts'
 
 const App = () =>
   <section>
-    <StackedBarChat
-      data={countries}
-      width={960}
-      height={500}
-      range={['#8da0cb', '#fc8d62']}
-      chartId={'country'} />
+    <Charts />
   </section>
 
 export default App

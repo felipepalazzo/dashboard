@@ -12,16 +12,9 @@ import {
 class StackedBarChat extends Component {
   constructor(props) {
     super(props)
-    const margin = {
-      top: 20,
-      right: 20,
-      bottom: 30,
-      left: 40,
-    }
     this.state = {
-      margin,
-      width: props.width - margin.left - margin.right,
-      height: props.height - margin.top - margin.bottom,
+      width: props.width - props.margin.left - props.margin.right,
+      height: props.height - props.margin.top - props.margin.bottom,
     }
     this.createChart = this.createChart.bind(this)
   }
@@ -32,7 +25,7 @@ class StackedBarChat extends Component {
     this.createChart()
   }
   createChart() {
-    const { range, data } = this.props
+    const { range, data, keys } = this.props
     const { width, height } = this.state
     data.sort((a, b) => b.total - a.total)
 
@@ -45,11 +38,11 @@ class StackedBarChat extends Component {
 
     x.domain(data.map(d => d.country))
     y.domain([0, max(data, d => d.total)]).nice()
-    z.domain(['p2p', 'cdn'])
+    z.domain(keys)
 
     const node = this.node
     const stacked = stack()
-    const series = stacked.keys(['p2p', 'cdn'])(data)
+    const series = stacked.keys(keys)(data)
 
     select(node)
       .selectAll('.serie')
@@ -66,10 +59,9 @@ class StackedBarChat extends Component {
       .attr('width', x.bandwidth())
   }
   render() {
-    const { width, height, chartId } = this.props
-    const { margin } = this.state
+    const { width, height, margin } = this.props
     return (
-      <svg width={width} height={height} id={chartId}>
+      <svg width={width} height={height}>
         <g
           transform={
             `translate(${margin.left},${margin.top})`
@@ -83,9 +75,15 @@ class StackedBarChat extends Component {
 StackedBarChat.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  chartId: PropTypes.string.isRequired,
-  range: PropTypes.array.isRequired,
-  data: PropTypes.array.isRequired,
+  range: PropTypes.arrayOf(PropTypes.string).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  keys: PropTypes.arrayOf(PropTypes.string).isRequired,
+  margin: PropTypes.shape({
+    top: PropTypes.number.isRequired,
+    bottom: PropTypes.number.isRequired,
+    left: PropTypes.number.isRequired,
+    right: PropTypes.number.isRequired,
+  }).isRequired
 }
 
 export default StackedBarChat
