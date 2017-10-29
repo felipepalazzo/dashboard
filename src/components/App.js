@@ -3,9 +3,15 @@ import Charts from './Charts'
 import Nav from './Nav'
 
 const App = () =>
-  <section>
+  <div>
     <Nav />
-    <Charts />
-  </section>
+    <section className="container">
+      <div className="row">
+        <div className="col-sm-10 col-sm-offset-1">
+          <Charts />
+        </div>
+      </div>
+    </section>
+  </div>
 
 export default App
