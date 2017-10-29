@@ -1,0 +1,19 @@
+.square {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-left: 10px;
+  top: 3px;
+  position: relative;
+}
+.square--orange {
+  background-color: #fc8d62;
+  margin-right: 20px;
+}
+.square--purple {
+  background-color: #8da0cb;
+}
+.abs-center {
+  display: flex;
+  align-items: center;
+}

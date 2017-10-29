@@ -15,8 +15,8 @@ class Charts extends Component {
     this.state = {
       margin,
       range: ['#8da0cb', '#fc8d62'],
-      width: 960,
-      height: 500,
+      width: 800,
+      height: 400,
       numOfCharts: 6,
       ticks: 10,
       keys: ['p2p', 'cdn'],
@@ -30,15 +30,19 @@ class Charts extends Component {
     return(
       <section>
         { groups.map((data, i) => (
-          <StackedBarChat
-            key={i}
-            data={data}
-            keys={this.state.keys}
-            ticks={this.state.ticks}
-            width={this.state.width}
-            height={this.state.height}
-            margin={this.state.margin}
-            range={this.state.range} />
+          <div className="panel panel-default" key={i}>
+            <div className="panel-heading">Chart {i+1}</div>
+            <div className="panel-body text-center">
+              <StackedBarChat
+                data={data}
+                keys={this.state.keys}
+                ticks={this.state.ticks}
+                width={this.state.width}
+                height={this.state.height}
+                margin={this.state.margin}
+                range={this.state.range} />
+            </div>
+          </div>
         ) ) }
       </section>
     )
