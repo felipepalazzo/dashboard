@@ -9,6 +9,8 @@ import {
   scaleOrdinal,
 } from 'd3-scale'
 
+import AxisX from './AxisX'
+
 class StackedBarChat extends Component {
   constructor(props) {
     super(props)
@@ -24,21 +26,33 @@ class StackedBarChat extends Component {
   componentDidUpdate() {
     this.createChart()
   }
-  createChart() {
-    const { range, data, keys } = this.props
-    const { width, height } = this.state
-    data.sort((a, b) => b.total - a.total)
-
-    const x = scaleBand()
+  xScale() {
+    let { width } = this.state
+    let { data } = this.props
+    let x = scaleBand()
       .rangeRound([0, width])
       .padding(.1)
       .align(.1)
+    x.domain(data.map(d => d.country))
+    return x
+  }
+  createChart() {
+    const { range, data, keys } = this.props
+    const { height } = this.state
+    data.sort((a, b) => b.total - a.total)
+
+    // const x = scaleBand()
+    //   .rangeRound([0, width])
+    //   .padding(.1)
+    //   .align(.1)
     const y = scaleLinear().rangeRound([height, 0])
     const z = scaleOrdinal().range(range)
 
-    x.domain(data.map(d => d.country))
+    // x.domain(data.map(d => d.country))
     y.domain([0, max(data, d => d.total)]).nice()
     z.domain(keys)
+
+    const x = this.xScale()
 
     const node = this.node
     const stacked = stack()
@@ -66,7 +80,9 @@ class StackedBarChat extends Component {
           transform={
             `translate(${margin.left},${margin.top})`
           }
-          ref={node => this.node = node}></g>
+          ref={node => this.node = node}>
+          <AxisX height={this.state.height} xScale={this.xScale()} />
+        </g>
       </svg>
     )
   }
